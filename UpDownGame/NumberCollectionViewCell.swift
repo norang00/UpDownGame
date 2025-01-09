@@ -16,14 +16,31 @@ class NumberCollectionViewCell: UICollectionViewCell {
     @IBOutlet var circleView: UIView!
     @IBOutlet var numberLabel: UILabel!
     
+    override var isSelected: Bool {
+        didSet {
+            if isSelected {
+                circleView.backgroundColor = .black
+                numberLabel.textColor = .white
+            } else {
+                circleView.backgroundColor = .white
+                numberLabel.textColor = .black
+            }
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
 
         circleView.layer.cornerRadius = 30
-        circleView.backgroundColor = .white
+    
     }
 
     func configureData(_ number: Int) {
-        numberLabel.text = "\(number+1)"
+        numberLabel.text = "\(number)"
+    }
+    
+    func highlightCell() {
+        circleView.backgroundColor = .blue
+        numberLabel.textColor = .white
     }
 }

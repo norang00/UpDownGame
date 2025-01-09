@@ -9,8 +9,9 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var isStarted: Bool = false
     var numberList: [Int] = []
+    var listStartNumber: Int = 1
+    var listEndNumber: Int = 0
     var randomNumber: Int = 0
     var standardNumber: Int = 0
     var guessNumber: Int = 0
@@ -23,7 +24,7 @@ class ViewController: UIViewController {
     @IBOutlet var inputTextField: UITextField!
     @IBOutlet var resultButton: UIButton!
     
-    static let sectionInset: CGFloat = 8
+    static let sectionInset: CGFloat = 12
     static let cellSpacing: CGFloat = 8
     static let itemInRow: CGFloat = 5
         
@@ -35,7 +36,6 @@ class ViewController: UIViewController {
     }
 
     @IBAction func tapGestureTapped(_ sender: UITapGestureRecognizer) {
-        print(#function)
         view.endEditing(true)
     }
     /* [고민한 부분]
@@ -54,19 +54,23 @@ extension ViewController {
     
     func configureView() {
         view.backgroundColor = .background
-
+        
+        titleLabel.text = "UP DOWN"
         titleLabel.textColor = .black
         titleLabel.textAlignment = .center
         titleLabel.font = .systemFont(ofSize: 40, weight: .black)
         titleLabel.numberOfLines = 1
         titleLabel.frame.size = titleLabel.intrinsicContentSize
         
+        tryCountLabel.text = "GAME"
+        tryCountLabel.textColor = .gray
         tryCountLabel.textAlignment = .center
         tryCountLabel.font = .systemFont(ofSize: 24, weight: .semibold)
         tryCountLabel.numberOfLines = 1
-        tryCountLabel.frame.size = titleLabel.intrinsicContentSize
+        tryCountLabel.frame.size = tryCountLabel.intrinsicContentSize
         tryCountLabel.contentMode = .top
 
+        coverImageView.isHidden = false
         coverImageView.backgroundColor = .background
         coverImageView.image = UIImage(named: "updown")
         coverImageView.contentMode = .scaleAspectFit
@@ -75,30 +79,106 @@ extension ViewController {
         inputTextField.borderStyle = .line
         inputTextField.backgroundColor = .white
         inputTextField.keyboardType = .numberPad
+        inputTextField.font = .systemFont(ofSize: 16, weight: .medium)
         inputTextField.isHidden = false
         
+        resultButton.setTitle("시작하기", for: .normal)
+        resultButton.isEnabled = !((inputTextField.text?.isEmpty) != nil)
+        resultButton.backgroundColor = resultButton.isEnabled ? .black : .gray
         resultButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
         resultButton.setTitleColor(.white, for: .normal)
         resultButton.setTitleColor(.lightGray, for: .disabled)
-
-        setViewLinkedWithStatus()
     }
     
-    func setViewLinkedWithStatus() {
-        titleLabel.text = "UP DOWN"
-        tryCountLabel.textColor = isStarted ?  .black : .gray
-        tryCountLabel.text = isStarted ? "시도 횟수: \(tryCountNumber)" : "GAME"
-        coverImageView.isHidden = isStarted
-        resultButton.setTitle(isStarted ? "결과 확인하기" : "시작하기", for: .normal)
-        resultButton.isEnabled = !((inputTextField.text?.isEmpty) != nil)
-        resultButton.backgroundColor = resultButton.isEnabled ? .black : .gray
-    }
+//    func setViewLinkedWithStatus() {
+//        titleLabel.text = "UP DOWN"
+//        tryCountLabel.textColor = isStarted ?  .black : .gray
+//        tryCountLabel.text = isStarted ? "시도 횟수: \(tryCountNumber)" : "GAME"
+//        coverImageView.isHidden = isStarted
+//        resultButton.setTitle(isStarted ? "결과 확인하기" : "시작하기", for: .normal)
+//        resultButton.isEnabled = !((inputTextField.text?.isEmpty) != nil)
+//        resultButton.backgroundColor = resultButton.isEnabled ? .black : .gray
+//    }
     /* [고민되는 부분]
      상태값에 따라 달라지는 View 요소들을 모아서 한번에 갱신할 수 있게 해봤는데, 요소별로 불필요한 것들도 있었다.
      버튼 텍스트 같은 경우에는 바뀌기 전에 항상 트리거가 있어서 적절하게 바꿔줄 수 있는 타이밍이 있었다.
      무리하게 삼항연산자 사용하지 않아도 될 것 같기도 하고... 스유의 스테이트 바인딩이 그리워지는 저녁이다..
      */
+}
+
+// MARK: - Game 상태 관련
+extension ViewController {
     
+    func setStandbyStatus() {
+        titleLabel.text = "UP DOWN"
+        tryCountLabel.textColor = .gray
+        tryCountLabel.text = "GAME"
+        coverImageView.isHidden = false
+        inputTextField.text = ""
+        inputTextField.isHidden = false
+        resultButton.setTitle("시작하기", for: .normal)
+        resultButton.isEnabled = false
+        resultButton.backgroundColor = .gray
+        
+        numberList = []
+        listStartNumber = 1
+        listEndNumber = 0
+        randomNumber = 0
+        standardNumber = 0
+        guessNumber = 0
+        tryCountNumber = 0
+    }
+    /* [고민]
+     초기화... 상태값 관리... 이게 최선일까??
+     */
+    
+    func setInGameStatus() {
+        titleLabel.text = "UP DOWN"
+        tryCountLabel.textColor = .black
+        tryCountLabel.text = "시도 횟수: \(tryCountNumber)"
+        coverImageView.isHidden = true
+        inputTextField.isHidden = true
+        resultButton.setTitle("결과 확인하기", for: .normal)
+        resultButton.isEnabled = false
+        resultButton.backgroundColor = .gray
+        collectionView.allowsSelection = true
+    }
+    
+    func setNumbersForGame() {
+        if let inputNumber = Int(inputTextField.text!) {
+            numberList = Array(1...inputNumber)
+            listEndNumber = inputNumber
+            randomNumber = numberList.randomElement()!
+        } else {
+            print("failed to get input number!")
+        }
+    }
+    
+    func checkResult() {
+        let isCorrect = (guessNumber == randomNumber)
+        if isCorrect {
+            titleLabel.text = "GOOD!"
+            resultButton.setTitle("처음으로 돌아가기", for: .normal)
+            collectionView.allowsSelection = false
+            
+            let index = numberList.firstIndex(of: guessNumber)!
+            let cell = collectionView.cellForItem(at: IndexPath(row: index, section: 0)) as! NumberCollectionViewCell
+            cell.highlightCell()
+            
+        } else {
+            if guessNumber > randomNumber {
+                titleLabel.text = "DOWN"
+                listEndNumber = guessNumber
+
+            } else if guessNumber < randomNumber {
+                titleLabel.text = "UP"
+                listStartNumber = guessNumber
+            }
+            numberList = Array(listStartNumber...listEndNumber)
+            collectionView.reloadData()
+            resultButton.isEnabled = false
+        }
+    }
 }
 
 // MARK: - TextField, Button Action 설정
@@ -115,62 +195,23 @@ extension ViewController {
     }
     
     @IBAction func buttonTapped(_ sender: UIButton) {
-        print(#function)
         let buttonTitle = sender.titleLabel?.text
         
-        if buttonTitle == "시작하기" { // 시작하기 버튼
-            print("numberList \(numberList)")
-            if let inputNumber = inputTextField.text {
-                standardNumber = Int(inputNumber) ?? 0
-                print("selectedNumber \(standardNumber)")
-            } else {
-                print("failed to get input number!")
-            }
-            print("numberList \(numberList)")
-            
-            isStarted = true
-            inputTextField.isHidden = true
-            setViewLinkedWithStatus()
-            
+        if buttonTitle == "시작하기" {
+            setInGameStatus()
+            setNumbersForGame()
             collectionView.reloadData()
             
         } else if buttonTitle == "결과 확인하기" {
-            
-            // 0. 시도 횟수를 카운트
             tryCountNumber += 1
+            tryCountLabel.text = "시도 횟수: \(tryCountNumber)"
 
-            // 1. guessNumber 와 randomNumber 를 비교
-            let isCorrect = (guessNumber == randomNumber)
+            checkResult()
             
-            if isCorrect {
-                // 2-1. 정답이면 Good을 띄우기
-                titleLabel.text = "GOOD!"
-                //      버튼을 처음으로 돌아가기로 바꾸기
-                resultButton.titleLabel?.text = "처음으로 돌아가기"
-                //      컬렉션뷰 버튼 선택 가능하지 않도록 하기
-                collectionView.allowsSelection = false
-            } else {
-                if guessNumber > randomNumber {
-                    titleLabel.text = "DOWN"
-                } else if guessNumber < randomNumber {
-                    titleLabel.text = "UP"
-                }
-                standardNumber = guessNumber
-                collectionView.reloadData()
-            }
-            
-            
-            // 2-2. 오답일 경우
-            //      guessNumber 가 randomNumber 보다 작으면 UP 크면 DOWN 을 띄우기
-            //      선택한 숫자를 토대로 컬렉션을 다시 그리기
-            //      선택한 내용들 다 deselet 하기 -> 버튼이 다시 disabled 됨 -> reload 하면 자동으로 되려나
-            
-        } else {
-            isStarted = false
-            resultButton.isEnabled = false
+        } else if buttonTitle == "처음으로 돌아가기" {
+            setStandbyStatus()
         }
     }
-    
 }
 
 // MARK: - Collection View 설정
@@ -195,24 +236,12 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         
         collectionView.backgroundColor = .background
         collectionView.allowsMultipleSelection = false
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.collectionViewLayout = ViewController.collectionViewLayout()
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NumberCollectionViewCell.identifier, for: indexPath) as! NumberCollectionViewCell
-
-        // 숫자버튼을 클릭하면
-        // 1. 색상을 바꿔주고
-        cell.circleView.backgroundColor = .black
-        cell.numberLabel.textColor = .white
-        
-        // 2. guessNumber 를 할당하고
-        guessNumber = indexPath.item+1
-        
-        // 3. 결과버튼을 활성화하기
+        guessNumber = numberList[indexPath.item]
         resultButton.isEnabled = true
     }
     
@@ -223,8 +252,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NumberCollectionViewCell.identifier, for: indexPath) as! NumberCollectionViewCell
         
-        cell.configureData(indexPath.item)
-        print(#function, indexPath.item)
+        cell.configureData(numberList[indexPath.item])
         return cell
     }
 
