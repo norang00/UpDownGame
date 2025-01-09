@@ -32,7 +32,8 @@ class NumberCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
 
         circleView.layer.cornerRadius = 30
-    
+        circleView.layer.borderColor = UIColor.black.cgColor
+        circleView.layer.borderWidth = 2
     }
 
     func configureData(_ number: Int) {
@@ -40,7 +41,8 @@ class NumberCollectionViewCell: UICollectionViewCell {
     }
     
     func highlightCell() {
-        circleView.backgroundColor = .blue
-        numberLabel.textColor = .white
+        circleView.backgroundColor = .cantaloupe
+        numberLabel.textColor = .black
+        numberLabel.font = .systemFont(ofSize: 20, weight: .bold)
     }
 }

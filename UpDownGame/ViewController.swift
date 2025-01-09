@@ -24,9 +24,7 @@ class ViewController: UIViewController {
     @IBOutlet var inputTextField: UITextField!
     @IBOutlet var resultButton: UIButton!
     
-    static let sectionInset: CGFloat = 12
-    static let cellSpacing: CGFloat = 8
-    static let itemInRow: CGFloat = 5
+    static let sectionInset: CGFloat = 24
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +51,7 @@ class ViewController: UIViewController {
 extension ViewController {
     
     func configureView() {
-        view.backgroundColor = .background
+        view.backgroundColor = .banana
         
         titleLabel.text = "UP DOWN"
         titleLabel.textColor = .black
@@ -71,23 +69,25 @@ extension ViewController {
         tryCountLabel.contentMode = .top
 
         coverImageView.isHidden = false
-        coverImageView.backgroundColor = .background
+        coverImageView.backgroundColor = .banana
         coverImageView.image = UIImage(named: "updown")
         coverImageView.contentMode = .scaleAspectFit
         coverImageView.isUserInteractionEnabled = true
         
+        inputTextField.placeholder = "  숫자를 입력해보세요!"
         inputTextField.borderStyle = .line
         inputTextField.backgroundColor = .white
         inputTextField.keyboardType = .numberPad
+        inputTextField.layer.borderWidth = 3
         inputTextField.font = .systemFont(ofSize: 16, weight: .medium)
         inputTextField.isHidden = false
         
         resultButton.setTitle("시작하기", for: .normal)
-        resultButton.isEnabled = !((inputTextField.text?.isEmpty) != nil)
-        resultButton.backgroundColor = resultButton.isEnabled ? .black : .gray
-        resultButton.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
         resultButton.setTitleColor(.white, for: .normal)
         resultButton.setTitleColor(.lightGray, for: .disabled)
+        resultButton.titleLabel?.font = .systemFont(ofSize: 22, weight: .semibold)
+        resultButton.layer.cornerRadius = 16
+        resultButton.layer.backgroundColor = UIColor.black.cgColor
     }
     
 //    func setViewLinkedWithStatus() {
@@ -106,7 +106,7 @@ extension ViewController {
      */
 }
 
-// MARK: - Game 상태 관련
+// MARK: - Game 상태 관련 로직
 extension ViewController {
     
     func setStandbyStatus() {
@@ -118,7 +118,6 @@ extension ViewController {
         inputTextField.isHidden = false
         resultButton.setTitle("시작하기", for: .normal)
         resultButton.isEnabled = false
-        resultButton.backgroundColor = .gray
         
         numberList = []
         listStartNumber = 1
@@ -140,7 +139,6 @@ extension ViewController {
         inputTextField.isHidden = true
         resultButton.setTitle("결과 확인하기", for: .normal)
         resultButton.isEnabled = false
-        resultButton.backgroundColor = .gray
         collectionView.allowsSelection = true
     }
     
@@ -234,7 +232,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         let xib = UINib(nibName: NumberCollectionViewCell.identifier, bundle: nil)
         collectionView.register(xib, forCellWithReuseIdentifier: NumberCollectionViewCell.identifier)
         
-        collectionView.backgroundColor = .background
+        collectionView.backgroundColor = .banana
         collectionView.allowsMultipleSelection = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.collectionViewLayout = ViewController.collectionViewLayout()
