@@ -169,11 +169,11 @@ extension ViewController {
         } else {
             if guessNumber > randomNumber {
                 titleLabel.text = "DOWN"
-                listEndNumber = guessNumber
+                listEndNumber = guessNumber-1
 
             } else if guessNumber < randomNumber {
                 titleLabel.text = "UP"
-                listStartNumber = guessNumber
+                listStartNumber = guessNumber+1
             }
             numberList = Array(listStartNumber...listEndNumber)
             collectionView.reloadData()
@@ -189,10 +189,8 @@ extension ViewController {
         guard let inputText = sender.text else { return }
 
         if inputText.count != 0 && !(inputText.count > 4) {
-            print(#function,"enable \(inputText.count)")
             resultButton.isEnabled = true
         } else {
-            print(#function, "disable \(inputText.count)")
             inputTextField.text = ""
             resultButton.isEnabled = false
         }
