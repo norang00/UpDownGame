@@ -13,7 +13,6 @@ class ViewController: UIViewController {
     var listStartNumber: Int = 1
     var listEndNumber: Int = 0
     var randomNumber: Int = 0
-    var standardNumber: Int = 0
     var guessNumber: Int = 0
     var tryCountNumber: Int = 0
 
@@ -36,6 +35,7 @@ class ViewController: UIViewController {
     @IBAction func tapGestureTapped(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
+    
     /* [고민한 부분]
      레이아웃이 비슷한 View 를 재사용 하고 싶다고 생각했다.
      1. 커버한 이미지를 isHidden = true 로 했는데 컬렉션 아이템들을 선택할 수 없었다.
@@ -74,6 +74,9 @@ extension ViewController {
         coverImageView.contentMode = .scaleAspectFit
         coverImageView.isUserInteractionEnabled = true
         
+        let padding = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: inputTextField.frame.height))
+        inputTextField.leftView = padding
+        inputTextField.leftViewMode = .always
         inputTextField.placeholder = "  숫자를 입력해보세요!"
         inputTextField.borderStyle = .line
         inputTextField.backgroundColor = .white
@@ -88,6 +91,7 @@ extension ViewController {
         resultButton.titleLabel?.font = .systemFont(ofSize: 22, weight: .semibold)
         resultButton.layer.cornerRadius = 16
         resultButton.layer.backgroundColor = UIColor.black.cgColor
+        resultButton.isEnabled = false
     }
     
 //    func setViewLinkedWithStatus() {
@@ -123,7 +127,6 @@ extension ViewController {
         listStartNumber = 1
         listEndNumber = 0
         randomNumber = 0
-        standardNumber = 0
         guessNumber = 0
         tryCountNumber = 0
     }
@@ -188,6 +191,7 @@ extension ViewController {
         if !inputText.isEmpty || !(inputText.count > 4) {
             resultButton.isEnabled = true
         } else {
+            inputTextField.text = ""
             resultButton.isEnabled = false
         }
     }

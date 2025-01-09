@@ -28,6 +28,11 @@ class NumberCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        numberLabel.font = .systemFont(ofSize: 20, weight: .medium)
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
 
