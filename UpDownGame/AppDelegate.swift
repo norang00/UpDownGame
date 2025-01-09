@@ -18,7 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         IQKeyboardManager.shared.isEnabled = true
         IQKeyboardManager.shared.keyboardDistance = 60
-
+        /* [고민되는 부분]
+         라이브러리 처음 써봤다. 너무 편리하다. 중독될거 같다..
+         */
+        
         return true
     }
 
