@@ -34,6 +34,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
+                                    <action selector="inputTextFieldEditingChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="bvV-3J-Hy8"/>
                                     <action selector="inputTextFieldEditingDidEnd:" destination="BYZ-38-t0r" eventType="editingDidEnd" id="LDf-1V-wyb"/>
                                 </connections>
                             </textField>

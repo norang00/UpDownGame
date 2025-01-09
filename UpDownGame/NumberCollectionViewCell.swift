@@ -36,9 +36,11 @@ class NumberCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        circleView.layer.cornerRadius = 30
+        circleView.layer.cornerRadius = 25
         circleView.layer.borderColor = UIColor.black.cgColor
         circleView.layer.borderWidth = 2
+        numberLabel.font = .systemFont(ofSize: 20, weight: .medium)
+
     }
 
     func configureData(_ number: Int) {

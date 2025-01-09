@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		EE4C1AD42D300FB500305BD8 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EE4C1AD32D300FB500305BD8 /* IQKeyboardManagerSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		EE4C199B2D2FA94900305BD8 /* UpDownGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UpDownGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE4C1AD42D300FB500305BD8 /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = UpDownGame;
 			packageProductDependencies = (
+				EE4C1AD32D300FB500305BD8 /* IQKeyboardManagerSwift */,
 			);
 			productName = UpDownGame;
 			productReference = EE4C199B2D2FA94900305BD8 /* UpDownGame.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = EE4C19922D2FA94900305BD8;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				EE4C1AD22D300FB500305BD8 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EE4C199C2D2FA94900305BD8 /* Products */;
 			projectDirPath = "";
@@ -343,6 +352,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EE4C1AD22D300FB500305BD8 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EE4C1AD32D300FB500305BD8 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EE4C1AD22D300FB500305BD8 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EE4C19932D2FA94900305BD8 /* Project object */;
 }

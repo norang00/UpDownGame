@@ -185,10 +185,23 @@ extension ViewController {
 // MARK: - TextField, Button Action 설정
 extension ViewController {
     
+    @IBAction func inputTextFieldEditingChanged(_ sender: UITextField) {
+        guard let inputText = sender.text else { return }
+
+        if inputText.count != 0 && !(inputText.count > 4) {
+            print(#function,"enable \(inputText.count)")
+            resultButton.isEnabled = true
+        } else {
+            print(#function, "disable \(inputText.count)")
+            inputTextField.text = ""
+            resultButton.isEnabled = false
+        }
+    }
+    
     @IBAction func inputTextFieldEditingDidEnd(_ sender: UITextField) {
         guard let inputText = sender.text else { return }
-        
-        if !inputText.isEmpty || !(inputText.count > 4) {
+
+        if inputText.count != 0 && !(inputText.count > 4) {
             resultButton.isEnabled = true
         } else {
             inputTextField.text = ""
@@ -200,6 +213,8 @@ extension ViewController {
         let buttonTitle = sender.titleLabel?.text
         
         if buttonTitle == "시작하기" {
+            view.endEditing(true)
+            
             setInGameStatus()
             setNumbersForGame()
             collectionView.reloadData()
@@ -225,7 +240,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         layout.minimumLineSpacing = 8
         layout.minimumInteritemSpacing = 8
         layout.sectionInset = UIEdgeInsets(top: sectionInset, left: sectionInset, bottom: sectionInset, right: sectionInset)
-        layout.itemSize = CGSize(width: 60, height: 60)
+        layout.itemSize = CGSize(width: 50, height: 50)
         return layout
     }
     
